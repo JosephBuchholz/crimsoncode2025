@@ -8,12 +8,13 @@ export const actions = {
 	default: async ({ request, cookies }) => {
 		console.log('register');
 		const data = await request.formData();
-		const { email, password } = Object.fromEntries(data) as Record<string, string>;
+		const { name, email, password } = Object.fromEntries(data) as Record<string, string, string>;
 		const userId = generateId(15);
 		const hashedPassword = await new Argon2id().hash(password);
 		const user = await client.user.create({
 			data: {
 				id: userId,
+				name: name,
 				email: email,
 				password: hashedPassword
 			}
