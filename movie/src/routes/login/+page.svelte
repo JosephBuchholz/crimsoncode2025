@@ -2,19 +2,6 @@
     import { enhance } from "$app/forms";
 </script>
 
-<!--<div class="w3-card w3-margin w3-padding">
-    <h1>Login</h1>
-    <form class="w3-container" method="post" use:enhance>
-        <div class="w3-margin-bottom">
-            Email <input class="w3-input w3-border" type="email" name="email">
-        </div>
-        <div class="w3-margin-bottom">
-            Password <input class="w3-input w3-border" type="password" name="password">
-        </div>
-        <button class="w3-btn w3-black">Login</button>
-    </form>
-</div>-->
-
 <div class="flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
 	<div class="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
          <h1 class="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Login</h1>
