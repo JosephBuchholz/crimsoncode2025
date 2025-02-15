@@ -4,10 +4,9 @@
 <div class="w3-card w3-margin w3-padding">
 	<div class="flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
 		<div class="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
-			<!---->
 			 <h1 class="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Sign up</h1>
 		</div>
-		<!---->
+
 		<form class="flex flex-col" method="post" use:enhance>
 			<div class="pb-2">
 				<label for="name" class="block mb-2 text-sm font-medium text-[#111827]">Name</label>
@@ -31,6 +30,5 @@
 			<div class="text-sm font-light text-[#6B7280] text-center">Already have an account? <a href="/login" class="font-medium text-[#4F46E5] hover:underline">Login</a>
 			</div>
 		</form>
-		<!---->
 	</div>
 </div>

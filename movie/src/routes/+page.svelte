@@ -5,8 +5,11 @@
     console.log(user);
 </script>
 
-<h1>Welcome!</h1>
-<h1>Hello, {user?.email}</h1>
+<h1 class="">Welcome!</h1>
+
+{#if user}
+  <h1>Hello, {user?.email}</h1>
+{/if}
 
 {#if data.user}
   <form action="/?/logout" method="post" use:enhance>
