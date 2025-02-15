@@ -34,10 +34,19 @@
 	},
 	"dependencies": {
 		"@libsql/client": "^0.14.0",
+		"@lucia-auth/adapter-prisma": "^4.0.1",
 		"@node-rs/argon2": "^2.0.2",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
+		"@prisma/client": "^6.3.1",
 		"drizzle-orm": "^0.38.4",
-		"npx": "^10.2.2"
+		"lucia": "^3.2.2",
+		"npx": "^10.2.2",
+		"oslo": "^1.2.1"
+	},
+	"overrides": {
+		"@lucia-auth/adapter-prisma": {
+			"@prisma/client": "^6.3.1"
+		}
 	}
 }
