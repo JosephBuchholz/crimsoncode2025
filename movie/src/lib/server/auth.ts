@@ -4,10 +4,45 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import { Lucia } from 'lucia';
+import { dev } from '$app/environment';
+import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
+import { PrismaClient } from '@prisma/client';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 export const sessionCookieName = 'auth-session';
+
+// --- from tutorial:
+export const client = new PrismaClient();
+
+const adapter = new PrismaAdapter(client.session, client.user);
+
+export const lucia = new Lucia(adapter, {
+	sessionCookie: {
+		attributes: {
+			// set to `true` when using HTTPS
+			secure: !dev
+		}
+	},
+	getUserAttributes: (attributes) => {
+		return {
+			email: attributes.email
+		};
+	}
+});
+
+declare module 'lucia' {
+	interface Register {
+		Lucia: typeof lucia;
+		DatabaseUserAttributes: DatabaseUserAttributes;
+	}
+}
+
+interface DatabaseUserAttributes {
+	email: string;
+}
+// --- end from tutorial
 
 export function generateSessionToken() {
 	const bytes = crypto.getRandomValues(new Uint8Array(18));
