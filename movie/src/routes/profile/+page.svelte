@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
+	import AuthActionButton from "../components/AuthActionButton.svelte";
     export let data;
     const { user } = data;
 </script>
@@ -10,9 +11,7 @@
     <p class="text-lg mb-4">Email: {user?.email}</p>
 
     <form action="/?/logout" method="post" use:enhance class="flex flex-col">
-      <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">
-        Logout
-      </button>
+      <AuthActionButton>Logout</AuthActionButton>
     </form>
   </div>
 {/if}

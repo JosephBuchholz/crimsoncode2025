@@ -1,6 +1,6 @@
 <script>
     import { enhance } from "$app/forms";
-	import EmailFormField from "../components/EmailFormField.svelte";
+	import AuthActionButton from "../components/AuthActionButton.svelte";
 	import FormField from "../components/FormField.svelte";
 </script>
 
@@ -22,8 +22,8 @@
             <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-asterisk"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M12 8v8"></path><path d="m8.5 14 7-4"></path><path d="m8.5 10 7 4"></path></svg>
         </FormField>
         
-        <button type="submit" class="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-hidden focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">Login</button>
-        <div class="text-sm font-light text-[#6B7280] ">Don't have an accout yet? <a href="#" class="font-medium text-[#4F46E5] hover:underline">Sign Up</a>
+        <AuthActionButton>Login</AuthActionButton>
+        <div class="text-sm font-light text-[#6B7280] ">Don't have an accout yet? <a href="/register" class="font-medium text-[#4F46E5] hover:underline">Sign Up</a>
 
         </div>
     </form>
