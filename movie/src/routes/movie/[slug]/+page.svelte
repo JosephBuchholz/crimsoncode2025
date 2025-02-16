@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Icon from "@iconify/svelte";
+	import Button from "$lib/components/Button.svelte";
+    import Icon from "@iconify/svelte";
 
     export let data;
     const { movie, serverWatched, serverRating } = data;
@@ -47,6 +48,11 @@
     }
 </script>
 
+<div class="flex w-full">
+    <button on:click={() => {
+            history.back();
+        }} class="text-black bg-blue-300 hover:brightness-110 focus:ring-4 focus:outline-hidden focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">&larr; Back</button>
+</div>
 
 <div class="flex flex-col m-4 p-4 w-full">
     <div class="flex flex-row w-full">
