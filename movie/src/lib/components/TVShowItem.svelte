@@ -7,8 +7,8 @@
     export let rating: string | undefined = undefined;
 </script>
 
-<a href="/tv/{tvShow.id}" class="m-4">
-    <div class="flex flex-col items-center p-4 border border-gray-300 rounded-sm w-48">
+<a href="/tv/{tvShow.id}" class="m-2 border border-gray-300 rounded-sm">
+    <div class="flex flex-col items-center p-4 w-48">
         <img src={tvShow.imageUrl} alt={tvShow.name} class="w-full rounded-sm" />
 
         <div class="justify-start">
