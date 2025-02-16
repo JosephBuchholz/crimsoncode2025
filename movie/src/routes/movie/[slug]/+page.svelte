@@ -30,7 +30,7 @@
     <div class="flex flex-row w-full">
         <div class="flex flex-col flex-1 m-4">
             <h1 class="text-3xl font-semibold mt-2">{movie.title}</h1>
-            <p class="text-sm text-gray-600 mt-1">{movie.getFormattedDataString()}</p>
+            <p class="text-sm text-gray-600 mt-1">{movie.year}</p>
 
             <p class="text-sm text-gray-600 mt-6">{movie.description}</p>
 
@@ -64,7 +64,7 @@
         </div>
 
         <div class="justify-end flex-1">
-            <img src={movie.imageUrl} alt={movie.title} class="w-full rounded-lg" />
+            <img src={movie.imageUrl} alt={movie.title} class="rounded-lg" style="margin: auto; max-height: 70vh" />
         </div>
     </div>
 </div>
