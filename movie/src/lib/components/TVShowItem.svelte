@@ -4,7 +4,7 @@
     export let tvShow: TVShow;
 </script>
 
-<a href="/movie/{tvShow.id}" class="m-4">
+<a href="/tv/{tvShow.id}" class="m-4">
     <div class="flex flex-col items-center p-4 border border-gray-300 rounded-sm w-48">
         <img src={tvShow.imageUrl} alt={tvShow.title} class="w-full rounded-sm" />
 
