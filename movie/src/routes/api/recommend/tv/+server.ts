@@ -142,7 +142,8 @@ export async function GET({ request }) {
 	// Get our ratings
 	const ourRatings = await prisma.userRating.findMany({
 		where: {
-			userId: user.id
+			userId: user.id,
+			type: "tv"
 		}
 	});
 
@@ -217,7 +218,8 @@ export async function GET({ request }) {
 				userRatings.filter(
 					(rating) =>
 						rating.rating !== 'unrated' &&
-						!recommendations.map((el) => el.id).includes(rating.tmdbId)
+						!recommendations.map((el) => el.id).includes(rating.tmdbId) &&
+						!ourRatedIds.includes(rating.tmdbId)
 				)
 			);
 

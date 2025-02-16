@@ -109,7 +109,8 @@ export async function GET({ request }) {
     const ourRatings = await prisma.userRating.findMany(
         { 
             where: { 
-                userId: user.id 
+                userId: user.id,
+                type: "movie"
             } 
         }
     );
@@ -185,7 +186,7 @@ export async function GET({ request }) {
                 } 
             }
         ).then((userRatings) => userRatings.filter(
-            (rating) => rating.rating !== 'unrated' && !recommendations.map((el) => el.id).includes(rating.tmdbId)
+            (rating) => rating.rating !== 'unrated' && !recommendations.map((el) => el.id).includes(rating.tmdbId) && !ourRatedIds.includes(rating.tmdbId)
         ));
 
         console.log("User ratings: " + JSON.stringify(userRatings))
