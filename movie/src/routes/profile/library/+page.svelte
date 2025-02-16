@@ -6,6 +6,7 @@
 	import TVShow from "$lib/TVShow";
 	import { onMount } from "svelte";
 	import LibraryMediaItem from "./LibraryMediaItem.svelte";
+	import MediaGrid from "$lib/components/MediaGrid.svelte";
 
 	let mediaItems: ({ media: Movie | TVShow, rating: string })[] = [];
 	let loading = false;
@@ -78,11 +79,11 @@
 	</div>
 
 	<div class="flex justify-center">
-		<div class="grid grid-cols-3 gap-4">
+		<MediaGrid>
 			{#each mediaItems as media}
 				<LibraryMediaItem media={media.media} rating={media.rating}></LibraryMediaItem>
 			{/each}
-		</div>
+		</MediaGrid>
 
 		{#if loading}
 			<LoadingSpinner></LoadingSpinner>
