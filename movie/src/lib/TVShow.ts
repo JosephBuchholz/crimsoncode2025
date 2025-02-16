@@ -3,7 +3,7 @@ import type { TMDBTVDetailsItem } from './server/tmdb';
 type TVGenre = {
 	id: number;
 	name: string;
-}
+};
 
 export default class TVShow {
 	id: number;
@@ -41,6 +41,10 @@ export default class TVShow {
 	}
 
 	getFormattedDataString(): string {
-		return `${this.year} | ${this.genres.map((genre) => genre.name).join(', ')}`;
+		if (this.genres.length === 0) {
+			return `${this.year}`;
+		} else {
+			return `${this.year} | ${this.genres.map((genre) => genre.name).join(', ')}`;
+		}
 	}
 }

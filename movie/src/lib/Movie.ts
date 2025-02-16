@@ -45,6 +45,14 @@ export default class Movie {
 	}
 
 	getFormattedDataString(): string {
-		return `${this.year} | ${this.length} m | ${this.genres.map((genre) => genre.name).join(', ')}`;
+		if (this.length === 0 && this.genres.length === 0) {
+			return `${this.year}`;
+		} else if (this.length === 0) {
+			return `${this.year} | ${this.genres.map((genre) => genre.name).join(', ')}`;
+		} else if (this.genres.length === 0) {
+			return `${this.year} | ${this.length}`;
+		} else {
+			return `${this.year} | ${this.length} m | ${this.genres.map((genre) => genre.name).join(', ')}`;
+		}
 	}
 }
