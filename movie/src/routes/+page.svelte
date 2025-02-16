@@ -1,48 +1,19 @@
-<script>
+<script lang="ts">
 	import MovieItem from "$lib/components/MovieItem.svelte";
 	import Movie from "$lib/Movie";
+	import type { TMDBMovieDetailsItem } from "$lib/server/tmdb";
+	import { onMount } from "svelte";
 
-    let movies = [
-        new Movie(
-			"ironman",
-			"Iron Man",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"ironman2",
-			"Iron Man 2",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"ironman3",
-			"Iron Man 3",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"somemovie",
-			"A movie",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		)];
+	let movies: Movie[] = [];
+
+	onMount(async () => {
+		const response = await fetch('http://localhost:5173/api/recommend/movies');
+		const data: TMDBMovieDetailsItem[] = (await response.json()).recommendations;
+		data.forEach((recommendation) => {
+			movies.push(Movie.constructFromServerData(recommendation));
+		});
+		movies = movies;
+	});
 </script>
 
 <div class="flex flex-col items-center justify-center w-full h-full">

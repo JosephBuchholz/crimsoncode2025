@@ -1,3 +1,5 @@
+import type { TMDBMovieDetailsItem } from './server/tmdb';
+
 export default class Movie {
 	id: number;
 	title: string;
@@ -14,7 +16,7 @@ export default class Movie {
 		imageUrl: string,
 		year: number,
 		length: number,
-		genre: string,
+		genre: string
 	) {
 		this.id = id;
 		this.title = title;
@@ -23,6 +25,18 @@ export default class Movie {
 		this.year = year;
 		this.length = length;
 		this.genre = genre;
+	}
+
+	static constructFromServerData(data: TMDBMovieDetailsItem): Movie {
+		return new Movie(
+			data.id,
+			data.title,
+			data.overview,
+			`https://image.tmdb.org/t/p/original${data.poster_path}`,
+			Number(data.release_date.split('-')[0]),
+			data.runtime,
+			data.genres[0].name
+		);
 	}
 
 	getFormattedDataString(): string {
