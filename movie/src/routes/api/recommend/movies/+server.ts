@@ -1,6 +1,6 @@
 import { lucia } from '$lib/server/auth'; // Assuming you have a custom utility to get the session
 import { PrismaClient } from '@prisma/client';
-import type { TMDBMovieDetailsItem, TMDBMovieSearchItem, TMDBTrendingMovieResponse } from '$lib/server/tmdb.js';
+import type { TMDBMovieDetailsItem, TMDBMovieSearchItem, TMDBMovieSearchResponse } from '$lib/server/tmdb.js';
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsIt
 
         while (recommendations.length < 20 && (results == null || results?.length > 0)) {
             console.log("Have " + recommendations.length + " recommendations, fetching page " + page + "...");
-            const response : TMDBTrendingMovieResponse = await (await fetch("https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=" + page + "&api_key=" + process.env.TMDB_API_KEY)).json();
+            const response : TMDBMovieSearchResponse = await (await fetch("https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=" + page + "&api_key=" + process.env.TMDB_API_KEY)).json();
             
             results = response.results;
             page = page + 1;

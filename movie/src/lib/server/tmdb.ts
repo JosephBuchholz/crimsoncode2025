@@ -1,4 +1,4 @@
-export type TMDBTrendingTVResponse = {
+export type TMDBTVSearchResponse = {
     page: number;
     results: TMDBTVSearchItem[];
     total_pages: number;
@@ -122,7 +122,7 @@ export type TMDBTVDetailsItem = {
     vote_count: number;
 }
     
-export type TMDBTrendingMovieResponse = {
+export type TMDBMovieSearchResponse = {
     page: number;
     results: TMDBMovieSearchItem[];
     total_pages: number;

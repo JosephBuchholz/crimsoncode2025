@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit';
 import { lucia } from '$lib/server/auth.js';
 import { PrismaClient } from '@prisma/client';
 import type { TMDBMovieDetailsItem } from '$lib/server/tmdb.js';

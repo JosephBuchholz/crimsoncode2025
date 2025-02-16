@@ -38,10 +38,13 @@
         ? 'flex'
         : 'hidden'}"
     >
+        {#if isLoggedIn}
         <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/">Explore</a>
+        {/if}
         <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/about">About</a>
 
         {#if isLoggedIn}
+            <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/profile/library">My Library</a>
             <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/profile">Profile</a>
         {:else}
             <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/login">Login</a>
