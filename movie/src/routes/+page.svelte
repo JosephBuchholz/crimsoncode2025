@@ -6,6 +6,8 @@
 	import type { TMDBMovieDetailsItem, TMDBTVDetailsItem } from "$lib/server/tmdb";
 	import TVShow from "$lib/TVShow";
 	import { onMount } from "svelte";
+	import { page } from '$app/stores';
+    let baseUrl : String = $page.url.origin;
 
 	let mediaItems: (Movie | TVShow)[] = [];
 	let loading = false;
@@ -18,7 +20,7 @@
 
 	async function loadRecommendations() {
 		loading = true;
-		const response = await fetch(`http://localhost:5173/api/recommend/${mediaType == "movie" ? "movies" : "tv"}`);
+		const response = await fetch(`${baseUrl}/api/recommend/${mediaType == "movie" ? "movies" : "tv"}`);
 
 		if (mediaType == "movie")
 		{

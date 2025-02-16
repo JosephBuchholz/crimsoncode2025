@@ -6,6 +6,8 @@
 	import { onMount } from "svelte";
 	import MediaGrid from "$lib/components/MediaGrid.svelte";
 	import MediaItem from "$lib/components/MediaItem.svelte";
+	import { page } from '$app/stores';
+    let baseUrl : String = $page.url.origin;
 
 	let mediaItems: ({ media: Movie | TVShow, rating: string })[] = [];
 	let loading = false;
@@ -16,7 +18,7 @@
 
 	async function loadWatched() {
 		loading = true;
-		const response = await fetch(`http://localhost:5173/api/watched/${mediaType == "movie" ? "movies" : "tv"}`);
+		const response = await fetch(`${baseUrl}/api/watched/${mediaType == "movie" ? "movies" : "tv"}`);
 
 		if (mediaType == "movie")
 		{

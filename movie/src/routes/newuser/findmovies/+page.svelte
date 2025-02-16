@@ -4,6 +4,8 @@
 	import { onMount } from "svelte";
 	import MovieRatingItem from "./MovieRatingItem.svelte";
 	import type { TMDBMovieSearchItem } from "$lib/server/tmdb";
+	import { page } from '$app/stores';
+    let baseUrl : String = $page.url.origin;
 
     let movies: Movie[] = [];
 
@@ -20,7 +22,7 @@
 	async function loadWatched() {
 		loading = true;
 		movies = [];
-		const response = await fetch(`http://localhost:5173/api/search/movies?q=${input}&page=${page}`);
+		const response = await fetch(`${baseUrl}/api/search/movies?q=${input}&page=${page}`);
 
 		const data: TMDBMovieSearchItem[] = (await response.json()).results;
 		data.forEach((el) => {
@@ -59,7 +61,7 @@
 
 	async function autoRate() {
 		for (const movie of Object.values(selectedMovies)) {
-			await fetch(`http://localhost:5173/api/rate/movie`, {
+			await fetch(`${baseUrl}/api/rate/movie`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
