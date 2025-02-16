@@ -13,6 +13,12 @@ export default {
 					light: '#f44336',
 					DEFAULT: '#e53935',
 					dark: '#d32f2f'
+				},
+				green: {
+					DEFAULT: '#4caf50'
+				},
+				red: {
+					DEFAULT: '#f44336'
 				}
 			}
 		}
