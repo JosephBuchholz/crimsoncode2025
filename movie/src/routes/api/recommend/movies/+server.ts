@@ -188,6 +188,8 @@ export async function GET({ request }) {
             (rating) => rating.rating !== 'unrated' && !recommendations.map((el) => el.id).includes(rating.tmdbId)
         ));
 
+        console.log("User ratings: " + JSON.stringify(userRatings))
+
         // This user has no ratings (new user?), so skip them and remove them from the pool
         if (userRatings.length === 0) {
             console.log("User " + randomUser + " has no ratings. Skipping...");
@@ -211,7 +213,7 @@ export async function GET({ request }) {
     
             console.log("Score for user " + randomUser + ": " + score);
     
-            if (Math.random() < score) {
+            if (Math.random() > score) {
                 tries++;
                 continue;
             }

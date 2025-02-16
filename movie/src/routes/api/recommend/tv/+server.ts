@@ -249,7 +249,7 @@ export async function GET({ request }) {
 
 			console.log('Score for user ' + randomUser + ': ' + score);
 
-			if (Math.random() < score) {
+			if (Math.random() > score) {
 				tries++;
 				continue;
 			}
