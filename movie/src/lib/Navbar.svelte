@@ -1,9 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
+    let baseUrl : String = $page.url.origin;
 
     export let isLoggedIn;
 
-    let baseUrl : String = $page.url.origin;
 
     let showMenu = false;
   
@@ -17,7 +17,7 @@
         <a
         class="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400"
         href="/"
-        >ProductName
+        >Echolog
         </a>
         <div class="flex md:hidden">
             <button
