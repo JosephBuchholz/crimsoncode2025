@@ -11,6 +11,6 @@
 
     <div class="justify-start">
         <h1 class="text-lg font-semibold mt-2">{movie.title}</h1>
-        <p class="text-sm text-gray-600 mt-1">{movie.getFormattedDataString()}</p>
+        <p class="text-sm text-gray-600 mt-1">{movie.year}</p>
     </div>
 </button>
