@@ -1,6 +1,8 @@
 <script lang="ts">
     import { page } from '$app/stores';
 
+    export let isLoggedIn;
+
     let baseUrl : String = $page.url.origin;
 
     let showMenu = false;
@@ -38,6 +40,11 @@
     >
         <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/">Explore</a>
         <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/about">About</a>
-        <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/profile">Profile</a>
+
+        {#if isLoggedIn}
+            <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/profile">Profile</a>
+        {:else}
+            <a class="px-6 py-4 rounded-md text-black hover:bg-gray-200" href="/login">Login</a>
+        {/if}
     </div>
 </nav>

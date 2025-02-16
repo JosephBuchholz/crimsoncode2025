@@ -1,6 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
-	import AuthActionButton from "../components/AuthActionButton.svelte";
+	import AuthActionButton from "../../lib/components/AuthActionButton.svelte";
     export let data;
     const { user } = data;
 </script>

@@ -6,7 +6,11 @@
 </script>
 
 <div class="max-w-screen-xl mx-auto p-4">
-	<Navbar/>
-	<slot {data}/>
+	<Navbar isLoggedIn={data.user != null} />
+
+	<div class="p-10">
+		<slot {data}/>
+	</div>
+
 	<Footer/>
 </div>
