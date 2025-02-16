@@ -5,6 +5,7 @@
 	import type { TMDBMovieSearchItem, TMDBTVSearchItem } from "$lib/server/tmdb";
 	import TVShow from "$lib/TVShow";
     import { page } from '$app/stores';
+	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
     let baseUrl : String = $page.url.origin;
 
     let shows: TVShow[] = [];
@@ -89,6 +90,12 @@
             <TVShowRatingItem show={show} onSelect={handleSelect} selected={selectedShows[show.id] !== undefined}></TVShowRatingItem>
         {/each}
     </div>
+
+	{#if loading}
+		<div class="flex flex-col items-center w-full">
+			<LoadingSpinner></LoadingSpinner>
+		</div>
+    {/if}
 
     <div class="flex flex-row w-full justify-between mt-5">
         <div class="m-6 w-40">

@@ -5,6 +5,7 @@
 	import MovieRatingItem from "./MovieRatingItem.svelte";
 	import type { TMDBMovieSearchItem } from "$lib/server/tmdb";
 	import { page } from '$app/stores';
+	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
     let baseUrl : String = $page.url.origin;
 
     let movies: Movie[] = [];
@@ -90,6 +91,12 @@
             <MovieRatingItem movie={movie} onSelect={handleSelect} selected={selectedMovies[movie.id] !== undefined}></MovieRatingItem>
         {/each}
     </div>
+
+	{#if loading}
+		<div class="flex flex-col items-center w-full">
+			<LoadingSpinner></LoadingSpinner>
+		</div>
+    {/if}
 
     <div class="flex flex-row w-full justify-between mt-5">
         <div class="m-6 w-40">
