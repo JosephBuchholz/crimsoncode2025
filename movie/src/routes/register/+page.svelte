@@ -1,5 +1,6 @@
 <script>
     import { enhance } from "$app/forms";
+	import TextLink from "$lib/components/TextLink.svelte";
 	import AuthActionButton from "../../lib/components/AuthActionButton.svelte";
 	import FormField from "../../lib/components/FormField.svelte";
 </script>
@@ -28,7 +29,8 @@
 			</FormField>
 
         	<AuthActionButton>Sign Up</AuthActionButton>
-			<div class="text-sm font-light text-[#6B7280] text-center">Already have an account? <a href="/login" class="font-medium text-[#4F46E5] hover:underline">Login</a>
+			<div class="text-sm font-light text-[#6B7280] text-center">
+				Already have an account? <TextLink href="/login">Login</TextLink>
 			</div>
 		</form>
 	</div>
