@@ -56,6 +56,23 @@
 		page = 1;
 		await loadWatched();
 	}
+
+	function autoRate() {
+		for (const movie of Object.values(selectedMovies)) {
+			fetch(`http://localhost:5173/api/rate/movie/${movie.id}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					watched: true,
+					rating: "positive"
+				})
+			});
+		}
+
+		window.location.href = "/newuser/findtv";
+	}
 </script>
 
 <div class="flex flex-col" style="height: calc(100vh - 200px)">
@@ -77,7 +94,7 @@
         </div>
 
         <div class="m-6 w-40">
-            <LinkButton href="/">Continue &rarr;</LinkButton>
+			<button on:click={autoRate} class="w-full text-white bg-primary hover:brightness-110 focus:ring-4 focus:outline-hidden focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">Continue &rarr;</button>
         </div>
     </div>
 </div>

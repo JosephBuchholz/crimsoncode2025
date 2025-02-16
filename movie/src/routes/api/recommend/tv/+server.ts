@@ -258,27 +258,47 @@ export async function GET({ request }) {
 		console.log('User ' + randomUser + ' was chosen.');
 
 		// Add a recommendation based on what this user liked
-		const userRecommendations = userRatings
-			.filter((rating) => rating.rating == 'positive')
-			.flatMap((rating) => {
-				if (rating.type !== 'tv') {
-					return [];
-				} else if (genreIds.includes(rating.genreId)) {
-					return [rating, rating];
-				} else {
-					return [rating];
-				}
-			});
+		const userLiked = userRatings.filter(
+            (rating) => rating.rating == 'positive'
+        );
 
-		if (userRecommendations.length === 0) {
-			console.log('User ' + randomUser + ' has no recommendations. Skipping...');
-			uniqueUsers = uniqueUsers.filter((id) => id !== randomUser);
-			tries++;
-			continue;
-		}
+        const userRecommendationsPromise = userLiked.flatMap(async (rating) => {
+            const ratingGenres = await prisma.ratingGenre.findMany({
+                where: {
+                    userId: randomUser,
+                    tmdbId: rating.tmdbId
+                }
+            })
 
-		const recommendedShowId =
-			userRecommendations[Math.floor(Math.random() * userRecommendations.length)].tmdbId;
+            if (rating.type !== 'tv') {
+                return []
+            }
+
+            let isLikedGenre = false;
+            for (let i = 0; i < ratingGenres.length; i++) {
+                if (genreIds.includes(ratingGenres[i].genreId)) {
+                    isLikedGenre = true;
+                    break;
+                }
+            }
+
+            if (isLikedGenre) {
+                return [rating, rating];  
+            } else {
+                return [rating];
+            }
+        })
+
+        const userRecommendations = await Promise.all(userRecommendationsPromise).then((values) => values.flatMap((value) => value));
+
+        if (userRecommendations.length === 0) {
+            console.log("User " + randomUser + " has no recommendations. Skipping...");
+            uniqueUsers = uniqueUsers.filter((id) => id !== randomUser);
+            tries++;
+            continue;
+        }
+        
+        const recommendedShowId = userRecommendations[Math.floor(Math.random() * userRecommendations.length)].tmdbId;
 
 		// Query TMDB APIfor the show with this tmdbId
 		try {

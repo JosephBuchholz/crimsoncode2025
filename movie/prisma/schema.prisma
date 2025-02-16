@@ -46,7 +46,7 @@ model UserRating {
   Genre   Genre? @relation(fields: [genreId], references: [id])
   genreId Int?
 
-  @@id([userId, tmdbId])
+  @@id([userId, tmdbId, type])
 }
 
 enum Rating {
@@ -58,16 +58,18 @@ enum Rating {
 model RatingGenre {
   userId  String
   tmdbId  Int
+  type   FilmType
   genreId Int
 
   genre Genre @relation(references: [id], fields: [genreId])
 
   user             User        @relation(references: [id], fields: [userId], onDelete: Cascade)
-  UserRating       UserRating? @relation(fields: [userRatingUserId, userRatingTmdbId], references: [userId, tmdbId])
+  UserRating       UserRating? @relation(fields: [userRatingUserId, userRatingTmdbId, userRatingType], references: [userId, tmdbId, type])
   userRatingUserId String?
   userRatingTmdbId Int?
+  userRatingType   FilmType?
 
-  @@id([userId, tmdbId, genreId])
+  @@id([userId, tmdbId, genreId, type])
 }
 
 model UserGenre {

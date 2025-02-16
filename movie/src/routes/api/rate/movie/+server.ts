@@ -34,7 +34,7 @@ export async function POST({ request }) {
             if (existingRating) {
                 await prisma.userRating.update({
                     where: {
-                        userId_tmdbId: { userId: user.id, tmdbId: data.id }
+                        userId_tmdbId_type: { userId: user.id, tmdbId: data.id, type: "movie" }
                     },
                     data: {
                         rating: data.rating
@@ -54,7 +54,8 @@ export async function POST({ request }) {
             await prisma.userRating.deleteMany({
                 where: {
                     userId: user.id,
-                    tmdbId: data.id
+                    tmdbId: data.id,
+                    type: "movie"
                 }
             });
         }
@@ -63,7 +64,7 @@ export async function POST({ request }) {
         for (const movieGenre of data.genres) {
             const genres = await prisma.genre.findMany({
                 where: {
-                    tmdbMovieId: movieGenre.id
+                    tmdbMovieId: movieGenre.id,
                 }
             });
 
@@ -76,7 +77,8 @@ export async function POST({ request }) {
                     data: {
                         userId: user.id,
                         tmdbId: data.id,
-                        genreId: genre.id
+                        genreId: genre.id,
+                        type: "movie"
                     }
                 });
             }

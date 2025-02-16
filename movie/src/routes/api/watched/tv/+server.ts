@@ -29,7 +29,8 @@ export async function GET({ request }) {
 
     const ratings = await prisma.userRating.findMany({
         where: {
-            userId: user.id
+            userId: user.id,
+            type: "tv"
         }
     });
 

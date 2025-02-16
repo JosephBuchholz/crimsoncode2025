@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsItem[], ourRatings : number[], tmdbGenreIds : number[]) {
     console.log("Filling remaining recommendations...");
 
-    // Fetch trending shows from TMDB API, filling the recommendations up to 20
+    // Fetch trending movies from TMDB API, filling the recommendations up to 20
     try {
         let page = 1
         let results : TMDBMovieSearchItem[] | null = null;
@@ -220,9 +220,11 @@ export async function GET({ request }) {
         console.log("User " + randomUser + " was chosen.");
 
         // Add a recommendation based on what this user liked
-        const userRecommendations = await userRatings.filter(
+        const userLiked = userRatings.filter(
             (rating) => rating.rating == 'positive'
-        ).flatMap( async (rating) => {
+        );
+
+        const userRecommendationsPromise = userLiked.flatMap(async (rating) => {
             const ratingGenres = await prisma.ratingGenre.findMany({
                 where: {
                     userId: randomUser,
@@ -247,7 +249,9 @@ export async function GET({ request }) {
             } else {
                 return [rating];
             }
-        });
+        })
+
+        const userRecommendations = await Promise.all(userRecommendationsPromise).then((values) => values.flatMap((value) => value));
 
         if (userRecommendations.length === 0) {
             console.log("User " + randomUser + " has no recommendations. Skipping...");
@@ -256,12 +260,13 @@ export async function GET({ request }) {
             continue;
         }
         
-        const recommendedShowId = userRecommendations[Math.floor(Math.random() * userRecommendations.length)].tmdbId;
+        const recommendedMovieId = userRecommendations[Math.floor(Math.random() * userRecommendations.length)].tmdbId;
 
-        // Query TMDB APIfor the show with this tmdbId
+        // Query TMDB APIfor the movie with this tmdbId
         try {
-            const recommendedShow : TMDBMovieDetailsItem = await (await fetch("https://api.themoviedb.org/3/movie/" + recommendedShowId + "?api_key=" + process.env.TMDB_API_KEY)).json();
-            recommendations.push(recommendedShow);
+            const recommendedMovie : TMDBMovieDetailsItem = await (await fetch("https://api.themoviedb.org/3/movie/" + recommendedMovieId + "?api_key=" + process.env.TMDB_API_KEY)).json();
+            
+            recommendations.push(recommendedMovie);
         }
         catch (e) {
             console.error(e);
