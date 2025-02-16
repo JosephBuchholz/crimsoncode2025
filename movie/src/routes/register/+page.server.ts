@@ -25,7 +25,7 @@ export const actions = {
 		});
 
 		// Populate preferred genres
-		console.log(genres)
+		console.log(genres);
 
 		// Generate session
 		const session = await lucia.createSession(user.id, {});
@@ -34,6 +34,6 @@ export const actions = {
 			path: '.',
 			...sessionCookie.attributes
 		});
-		redirect(302, '/');
+		redirect(302, '/newuser/findmovies');
 	}
 };
