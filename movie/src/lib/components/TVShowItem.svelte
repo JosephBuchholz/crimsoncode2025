@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type TVShow from "$lib/TVShow";
+    import Rating from "$lib/components/Rating.svelte";
 
     export let tvShow: TVShow;
+
+    export let rating: string | undefined = undefined;
 </script>
 
 <a href="/tv/{tvShow.id}" class="m-4">
@@ -12,5 +15,9 @@
             <h1 class="text-lg font-semibold mt-2">{tvShow.name}</h1>
             <p class="text-sm text-gray-600 mt-1">{tvShow.getFormattedDataString()}</p>
         </div>
+
+        {#if rating}
+            <Rating rating={rating}></Rating>
+        {/if}
     </div>
 </a>

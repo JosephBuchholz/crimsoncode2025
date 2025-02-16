@@ -1,12 +1,11 @@
 <script lang="ts">
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
-	import MediaItem from "$lib/components/MediaItem.svelte";
 	import Movie from "$lib/Movie";
 	import type { TMDBMovieDetailsItem, TMDBTVDetailsItem } from "$lib/server/tmdb";
 	import TVShow from "$lib/TVShow";
 	import { onMount } from "svelte";
-	import LibraryMediaItem from "./LibraryMediaItem.svelte";
 	import MediaGrid from "$lib/components/MediaGrid.svelte";
+	import MediaItem from "$lib/components/MediaItem.svelte";
 
 	let mediaItems: ({ media: Movie | TVShow, rating: string })[] = [];
 	let loading = false;
@@ -81,7 +80,7 @@
 	<div class="flex justify-center">
 		<MediaGrid>
 			{#each mediaItems as media}
-				<LibraryMediaItem media={media.media} rating={media.rating}></LibraryMediaItem>
+				<MediaItem media={media.media} rating={media.rating}></MediaItem>
 			{/each}
 		</MediaGrid>
 
