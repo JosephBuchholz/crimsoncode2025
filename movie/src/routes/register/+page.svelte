@@ -9,24 +9,24 @@
 
     let value = null;
 	let items = [
-		"Action",
-		"Adventure",
-		"Animation",
-		"Comedy",
-		"Crime",
-		"Documentary",
-		"Drama",
-		"Family",
-		"Fantasy",
-		"History",
-		"Horror",
-		"Music",
-		"Mystery",
-		"Romance",
-		"Sci-Fi",
-		"Thriller",
-		"War",
-		"Western"
+		{ value: 0, label: "Action" },
+		{ value: 1, label: "Adventure" },
+		{ value: 2, label: "Animation" },
+		{ value: 3, label: "Comedy" },
+		{ value: 4, label: "Crime" },
+		{ value: 5, label: "Documentary" },
+		{ value: 6, label: "Drama" },
+		{ value: 7, label: "Family" },
+		{ value: 8, label: "Fantasy" },
+		{ value: 9, label: "History" },
+		{ value: 10, label: "Horror" },
+		{ value: 11, label: "Music" },
+		{ value: 12, label: "Mystery" },
+		{ value: 13, label: "Romance" },
+		{ value: 14, label: "Sci-Fi" },
+		{ value: 15, label: "Thriller" },
+		{ value: 16, label: "War" },
+		{ value: 17, label: "Western" }
 	];
 </script>
 
@@ -57,7 +57,7 @@
 
 			<label for="genres" class="block mb-2 text-sm font-medium text-[#111827]">Preferred Genres<RequiredTag/></label>
 			<div class="mb-4">
-				<Select name="genres" multiple required {items} bind:value/>
+				<Select name="genres" closeListOnChange={false} multiple required {items} bind:value/>
 			</div>
 
         	<AuthActionButton>Sign Up</AuthActionButton>
