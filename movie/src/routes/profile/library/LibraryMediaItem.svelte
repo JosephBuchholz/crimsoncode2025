@@ -7,7 +7,7 @@
     let movie: Movie = media as Movie;
     let tvShow: TVShow = media as TVShow;
 
-    let rating: number = 1;
+    export let rating: string;
 </script>
 
 {#if media instanceof Movie}
@@ -20,11 +20,11 @@
                 <p class="text-sm text-gray-600 mt-1">{movie.getFormattedDataString()}</p>
             </div>
 
-            {#if rating === 1}
+            {#if rating == "positive"}
                 <button class="text-white bg-green font-medium rounded-lg text-sm h-10 px-2 text-center m-2">
                     <Icon width="24" height="24" icon="material-symbols:thumb-up" />
                 </button>
-            {:else}
+            {:else if rating == "negative"}
                 <button class="text-white bg-red font-medium rounded-lg text-sm h-10 px-2 text-center m-2">
                     <Icon width="24" height="24" icon="material-symbols:thumb-down"/>
                 </button>
@@ -40,6 +40,16 @@
                 <h1 class="text-lg font-semibold mt-2">{tvShow.name}</h1>
                 <p class="text-sm text-gray-600 mt-1">{tvShow.getFormattedDataString()}</p>
             </div>
+            
+            {#if rating == "positive"}
+                <button class="text-white bg-green font-medium rounded-lg text-sm h-10 px-2 text-center m-2">
+                    <Icon width="24" height="24" icon="material-symbols:thumb-up" />
+                </button>
+            {:else if rating == "negative"}
+                <button class="text-white bg-red font-medium rounded-lg text-sm h-10 px-2 text-center m-2">
+                    <Icon width="24" height="24" icon="material-symbols:thumb-down"/>
+                </button>
+            {/if}
         </div>
     </a>
 {/if}
