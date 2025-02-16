@@ -12,6 +12,7 @@
 	let mediaItems: (Movie | TVShow)[] = [];
 	let loading = false;
 	let input = "";
+	let recommendations : number[] = []
 
 	onMount(() => {
 		loadRecommendations();
@@ -21,13 +22,14 @@
 
 	async function loadRecommendations() {
 		loading = true;
-		const response = await fetch(`${baseUrl}/api/recommend/${mediaType == "movie" ? "movies" : "tv"}`);
+		const response = await fetch(`${baseUrl}/api/recommend/${mediaType == "movie" ? "movies" : "tv"}?exclude=${recommendations}`);
 
 		if (mediaType == "movie")
 		{
 			const data: TMDBMovieDetailsItem[] = (await response.json()).recommendations;
 			data.forEach((recommendation) => {
 				mediaItems.push(Movie.constructFromServerData(recommendation));
+				recommendations.push(recommendation.id);
 			});
 		}
 		else
@@ -35,6 +37,7 @@
 			const data: TMDBTVDetailsItem[] = (await response.json()).recommendations;
 			data.forEach((recommendation) => {
 				mediaItems.push(TVShow.constructFromTVServerData(recommendation));
+				recommendations.push(recommendation.id);
 			});
 		}
 

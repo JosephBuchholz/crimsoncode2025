@@ -4,7 +4,7 @@ import type { TMDBMovieDetailsItem, TMDBMovieSearchItem, TMDBMovieSearchResponse
 
 const prisma = new PrismaClient();
 
-async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsItem[], ourRatings : number[], tmdbGenreIds : number[]) {
+async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsItem[], existing : number[], ourRatings : number[], tmdbGenreIds : number[]) {
     console.log("Filling remaining recommendations...");
 
     // Fetch trending movies from TMDB API, filling the recommendations up to 20
@@ -26,6 +26,11 @@ async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsIt
 
                 if (recommendations.map((el) => el.id).includes(results[i].id)) {
                     console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because we already have it in our recommendations.");
+                    continue;
+                }
+
+                if (existing.includes(results[i].id)) {
+                    console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because we already have it in our recommendations (2).");
                     continue;
                 }
 
@@ -62,10 +67,12 @@ async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsIt
         console.error(e);
     }
 
+    console.log("Existing: " + existing);
     return recommendations;
+
 }
 
-export async function GET({ request }) {
+export async function GET({ request, url }) {
     const cookieHeader = request.headers.get("Cookie");
     const sessionId = lucia.readSessionCookie(cookieHeader ?? "");
     if (!sessionId) {
@@ -80,6 +87,8 @@ export async function GET({ request }) {
             status: 401
         });
     }
+
+    const existing = url.searchParams.get('exclude')?.split(',').map((el) => Number(el)) ?? [];
 
     console.log("User " + user.id + " (" + user.name + ") wants a recommendation!");
 
@@ -134,7 +143,7 @@ export async function GET({ request }) {
         if (tries > 100) {
             console.log("Too many tries. Returning recommendations.");
             
-            recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
+            recommendations = await fillRemainingRecommendations(recommendations, existing, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
             return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
                 status: 200,
@@ -165,7 +174,7 @@ export async function GET({ request }) {
         if (!randomUser) {
             console.log("No users found. Returning recommendations.");
 
-            recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
+            recommendations = await fillRemainingRecommendations(recommendations, existing, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
             return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
                 status: 200,
@@ -224,7 +233,7 @@ export async function GET({ request }) {
 
         // Add a recommendation based on what this user liked
         const userLiked = userRatings.filter(
-            (rating) => rating.rating == 'positive'
+            (rating) => rating.rating == 'positive' && !existing.includes(rating.tmdbId)
         );
 
         const userRecommendationsPromise = userLiked.flatMap(async (rating) => {
