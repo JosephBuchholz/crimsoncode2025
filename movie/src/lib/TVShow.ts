@@ -1,41 +1,46 @@
 import type { TMDBTVDetailsItem } from './server/tmdb';
 
+type TVGenre = {
+	id: number;
+	name: string;
+}
+
 export default class TVShow {
 	id: number;
-	title: string;
+	name: string;
 	description: string;
 	imageUrl: string;
 	year: number;
-	genre: string;
+	genres: TVGenre[];
 
 	constructor(
 		id: number,
-		title: string,
+		name: string,
 		description: string,
 		imageUrl: string,
 		year: number,
-		genre: string
+		genres: TVGenre[]
 	) {
 		this.id = id;
-		this.title = title;
+		this.name = name;
 		this.description = description;
 		this.imageUrl = imageUrl;
 		this.year = year;
-		this.genre = genre;
+		this.genres = genres;
 	}
 
-	static constructFromTVServerData(data: TMDBTVDetailsItem): Movie {
+	static constructFromTVServerData(data: TMDBTVDetailsItem): TVShow {
 		return new TVShow(
 			data.id,
 			data.name,
 			data.overview,
 			`https://image.tmdb.org/t/p/original${data.poster_path}`,
 			Number(data.first_air_date.split('-')[0]),
-			data.genres[0].name
+			data.genres
 		);
 	}
 
 	getFormattedDataString(): string {
-		return `${this.year} | ${this.genre}`;
+		return `${this.year} | ${this.genres.map((genre) => genre.name).join(', ')}`;
 	}
 }
