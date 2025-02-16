@@ -5,17 +5,18 @@
 	import type { TMDBMovieDetailsItem, TMDBTVDetailsItem } from "$lib/server/tmdb";
 	import TVShow from "$lib/TVShow";
 	import { onMount } from "svelte";
+	import LibraryMediaItem from "./LibraryMediaItem.svelte";
 
 	let mediaItems: (Movie | TVShow)[] = [];
 	let loading = false;
 
 	onMount(() => {
-		loadRecommendations();
+		loadWatched();
 		window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
 	});
 
-	async function loadRecommendations() {
+	async function loadWatched() {
 		loading = true;
 		const response = await fetch(`http://localhost:5173/api/recommend/${mediaType == "movie" ? "movies" : "tv"}`);
 
@@ -41,26 +42,26 @@
 
 	function handleScroll() {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500 && !loading) {
-            loadRecommendations();
+            loadWatched();
         }
     }
 
-	function reloadRecommendations() {
+	function reloadWatched() {
 		mediaItems = [];
-		loadRecommendations();
+		loadWatched();
 	}
 
 	var mediaType = "movie";
 </script>
 
-<div class="flex flex-col items-center justify-center w-full h-full">
-    <h1 class="text-2xl font-bold mb-4">Welcome!</h1>
+<div class="flex flex-col center-content  justify-center w-full h-full">
+    <h1 class="text-2xl font-bold ml-auto mr-auto mb-4">Your Library</h1>
 
-	<div class="flex flex-col">
+	<div class="flex flex-row ml-auto mr-auto">
 		<button on:click={() => {
 			if (mediaType == "movie") return;
 			mediaType = "movie";
-			reloadRecommendations();
+			reloadWatched();
 		}}
 		class="bg-{mediaType == "movie" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 rounded-md text-white"
 		>Movies</button>
@@ -68,20 +69,22 @@
 		<button on:click={() => {
 			if (mediaType == "tvshow") return;
 			mediaType = "tvshow";
-			reloadRecommendations();
+			reloadWatched();
 		}}
 
 		class="bg-{mediaType == "tvshow" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 rounded-md text-white"
 		>TV Shows</button>
 	</div>
 
-    <div class="grid grid-cols-3 gap-4">
-        {#each mediaItems as media}
-			<MediaItem media={media}></MediaItem>
-		{/each}
-    </div>
+	<div class="flex justify-center">
+		<div class="grid grid-cols-3 gap-4">
+			{#each mediaItems as media}
+				<LibraryMediaItem media={media}></LibraryMediaItem>
+			{/each}
+		</div>
 
-	{#if loading}
-		<LoadingSpinner></LoadingSpinner>
-    {/if}
+		{#if loading}
+			<LoadingSpinner></LoadingSpinner>
+		{/if}
+	</div>
 </div>
