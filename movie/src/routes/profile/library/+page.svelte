@@ -7,31 +7,38 @@
 	import { onMount } from "svelte";
 	import LibraryMediaItem from "./LibraryMediaItem.svelte";
 
-	let mediaItems: (Movie | TVShow)[] = [];
+	let mediaItems: ({ media: Movie | TVShow, rating: string })[] = [];
 	let loading = false;
 
 	onMount(() => {
 		loadWatched();
-		window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
 	});
 
 	async function loadWatched() {
 		loading = true;
-		const response = await fetch(`http://localhost:5173/api/recommend/${mediaType == "movie" ? "movies" : "tv"}`);
+		const response = await fetch(`http://localhost:5173/api/watched/${mediaType == "movie" ? "movies" : "tv"}`);
 
 		if (mediaType == "movie")
 		{
-			const data: TMDBMovieDetailsItem[] = (await response.json()).recommendations;
-			data.forEach((recommendation) => {
-				mediaItems.push(Movie.constructFromServerData(recommendation));
+			const data = (await response.json()).watched;
+
+			data.forEach((item: any) => {
+				const movie: TMDBMovieDetailsItem = item.item;
+				const rating: string = item.rating;
+				console.log(rating);
+
+				mediaItems.push({ media: Movie.constructFromServerData(movie), rating: rating });
 			});
 		}
 		else
 		{
-			const data: TMDBTVDetailsItem[] = (await response.json()).recommendations;
-			data.forEach((recommendation) => {
-				mediaItems.push(TVShow.constructFromTVServerData(recommendation));
+			const data = (await response.json()).watched;
+
+			data.forEach((item: any) => {
+				const show: TMDBTVDetailsItem = item.item;
+				const rating: string = item.rating;
+
+				mediaItems.push({ media: TVShow.constructFromTVServerData(show), rating: rating });
 			});
 		}
 
@@ -39,12 +46,6 @@
 		mediaItems = mediaItems;
 		loading = false;
 	}
-
-	function handleScroll() {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500 && !loading) {
-            loadWatched();
-        }
-    }
 
 	function reloadWatched() {
 		mediaItems = [];
@@ -79,7 +80,7 @@
 	<div class="flex justify-center">
 		<div class="grid grid-cols-3 gap-4">
 			{#each mediaItems as media}
-				<LibraryMediaItem media={media}></LibraryMediaItem>
+				<LibraryMediaItem media={media.media} rating={media.rating}></LibraryMediaItem>
 			{/each}
 		</div>
 
