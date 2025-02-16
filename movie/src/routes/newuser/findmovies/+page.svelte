@@ -1,54 +1,35 @@
 <script lang="ts">
 	import LinkButton from "$lib/components/LinkButton.svelte";
 	import Movie from "$lib/Movie";
+	import { onMount } from "svelte";
 	import MovieRatingItem from "./MovieRatingItem.svelte";
+	import type { TMDBMovieDetailsItem } from "$lib/server/tmdb";
 
-    let movies = [
-        new Movie(
-			"ironman",
-			"Iron Man",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"ironman2",
-			"Iron Man 2",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"ironman3",
-			"Iron Man 3",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		),
-        new Movie(
-			"somemovie",
-			"A movie",
-			'Movie Description',
-			'https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg',
-			2008,
-			126,
-			'Action',
-			'PG-13'
-		)];
+    let movies: Movie[] = [];
 
-    let selectedMovies: Record<string, Movie> = {};
+    let selectedMovies: Record<number, Movie> = {};
+
+	let loading = false;
+	let input = "";
+
+	onMount(() => {
+		loadWatched();
+	});
+
+	async function loadWatched() {
+		loading = true;
+		const response = await fetch(`http://localhost:5173/api/recommend/movies`);
+
+		const data: TMDBMovieDetailsItem[] = (await response.json()).recommendations;
+		data.forEach((recommendation) => {
+			movies.push(Movie.constructFromServerData(recommendation));
+		});
+
+		movies = movies;
+		loading = false;
+	}
 
     function handleSelect(movie: Movie) {
-        console.log(movie);
         if (selectedMovies[movie.id] !== undefined) { // deselect
             delete selectedMovies[movie.id];
             selectedMovies = selectedMovies;
@@ -62,10 +43,10 @@
 
 <div class="flex flex-col" style="height: calc(100vh - 200px)">
     <div class="m-6">
-        <h1>Search for movies that you have enjoyed</h1>
+        <h1>Select a few movies that you enjoyed</h1>
     </div>
 
-    <input type="text" placeholder="Search for movies" class="w-full p-2 border border-gray-300 rounded-lg mb-6">
+    <input type="text" placeholder="Search for movies" class="w-full p-2 border border-gray-300 rounded-lg mb-6" bind:value={input}/>
 
     <div class="grid grid-cols-3 gap-4 overflow-y-scroll place-items-center">
         {#each movies as movie}
