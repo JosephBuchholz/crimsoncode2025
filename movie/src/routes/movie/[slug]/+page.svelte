@@ -7,7 +7,7 @@
     <div class="flex flex-row w-full">
         <div class="flex-1">
             <h1 class="text-xlg font-semibold mt-2">{movie.title}</h1>
-            <p class="text-sm text-gray-600 mt-1">{movie.year} | {movie.ageRating} | {movie.length} | {movie.genre}</p>
+            <p class="text-sm text-gray-600 mt-1">{movie.getFormattedDataString()}</p>
 
             <p class="text-sm text-gray-600 mt-6">{movie.description}</p>
         </div>

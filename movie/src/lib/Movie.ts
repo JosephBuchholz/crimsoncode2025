@@ -27,4 +27,8 @@ export default class Movie {
 		this.genre = genre;
 		this.ageRating = ageRating;
 	}
+
+	getFormattedDataString(): string {
+		return `${this.year} | ${this.ageRating} | ${this.length} m | ${this.genre}`;
+	}
 }
