@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
+	import MediaGrid from "$lib/components/MediaGrid.svelte";
 	import MediaItem from "$lib/components/MediaItem.svelte";
 	import Movie from "$lib/Movie";
 	import type { TMDBMovieDetailsItem, TMDBTVDetailsItem } from "$lib/server/tmdb";
@@ -75,11 +76,11 @@
 		>TV Shows</button>
 	</div>
 
-    <div class="grid grid-cols-3 gap-4">
+	<MediaGrid>
         {#each mediaItems as media}
 			<MediaItem media={media}></MediaItem>
 		{/each}
-    </div>
+	</MediaGrid>
 
 	{#if loading}
 		<LoadingSpinner></LoadingSpinner>
