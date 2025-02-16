@@ -67,7 +67,7 @@
 
     <input type="text" placeholder="Search for movies" class="w-full p-2 border border-gray-300 rounded-lg mb-6">
 
-    <div class="grid grid-cols-3 gap-4 overflow-y-scroll">
+    <div class="grid grid-cols-3 gap-4 overflow-y-scroll place-items-center">
         {#each movies as movie}
             <MovieRatingItem movie={movie} onSelect={handleSelect} selected={selectedMovies[movie.id] !== undefined}></MovieRatingItem>
         {/each}
@@ -75,9 +75,7 @@
 
     <div class="flex flex-row w-full justify-between mt-5">
         <div class="m-6 w-40">
-            <a href="/">
-                <button class="w-full text-black bg-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-hidden focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">Skip</button>
-            </a>
+            <LinkButton href="/" color="gray-400" textColor="black">Skip</LinkButton>
         </div>
 
         <div class="m-6 w-40">
