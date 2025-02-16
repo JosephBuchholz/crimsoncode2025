@@ -58,15 +58,15 @@
 </script>
 
 <div class="flex flex-col center-content  justify-center w-full h-full">
-    <h1 class="text-2xl font-bold ml-auto mr-auto mb-4">Your Library</h1>
+    <h1 class="text-3xl font-bold ml-auto mr-auto mb-6">Your Library</h1>
 
-	<div class="flex flex-row ml-auto mr-auto">
+	<div class="flex flex-row w-full">
 		<button on:click={() => {
 			if (mediaType == "movie") return;
 			mediaType = "movie";
 			reloadWatched();
 		}}
-		class="bg-{mediaType == "movie" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 rounded-md text-white"
+		class="bg-{mediaType == "movie" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 w-full rounded-md text-white"
 		>Movies</button>
 
 		<button on:click={() => {
@@ -75,7 +75,7 @@
 			reloadWatched();
 		}}
 
-		class="bg-{mediaType == "tvshow" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 rounded-md text-white"
+		class="bg-{mediaType == "tvshow" ? "primary" : "gray-400"} hover:brightness-110 p-2 m-2 w-full rounded-md text-white"
 		>TV Shows</button>
 	</div>
 

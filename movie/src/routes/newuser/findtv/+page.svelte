@@ -6,6 +6,7 @@
 	import TVShow from "$lib/TVShow";
     import { page } from '$app/stores';
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
+	import MediaGrid from "$lib/components/MediaGrid.svelte";
     let baseUrl : String = $page.url.origin;
 
     let shows: TVShow[] = [];
@@ -85,11 +86,13 @@
 
     <input type="text" placeholder="Search for shows" class="w-full p-2 border border-gray-300 rounded-lg mb-6" on:change={searchChange} bind:value={input}/>
 
-    <div class="grid grid-cols-3 gap-4 overflow-y-scroll place-items-center">
-        {#each shows as show}
-            <TVShowRatingItem show={show} onSelect={handleSelect} selected={selectedShows[show.id] !== undefined}></TVShowRatingItem>
-        {/each}
-    </div>
+	<div class="flex flex-col w-full items-center overflow-y-scroll">
+		<MediaGrid>
+			{#each shows as show}
+				<TVShowRatingItem show={show} onSelect={handleSelect} selected={selectedShows[show.id] !== undefined}></TVShowRatingItem>
+			{/each}
+		</MediaGrid>
+	</div>
 
 	{#if loading}
 		<div class="flex flex-col items-center w-full">

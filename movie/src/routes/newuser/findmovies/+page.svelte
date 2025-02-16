@@ -6,6 +6,8 @@
 	import type { TMDBMovieSearchItem } from "$lib/server/tmdb";
 	import { page } from '$app/stores';
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
+	import MediaGrid from "$lib/components/MediaGrid.svelte";
+	import MediaItem from "$lib/components/MediaItem.svelte";
     let baseUrl : String = $page.url.origin;
 
     let movies: Movie[] = [];
@@ -86,11 +88,13 @@
 
     <input type="text" placeholder="Search for movies" class="w-full p-2 border border-gray-300 rounded-lg mb-6" on:change={searchChange} bind:value={input}/>
 
-    <div class="grid grid-cols-3 gap-4 overflow-y-scroll place-items-center">
-        {#each movies as movie}
-            <MovieRatingItem movie={movie} onSelect={handleSelect} selected={selectedMovies[movie.id] !== undefined}></MovieRatingItem>
-        {/each}
-    </div>
+	<div class="flex flex-col w-full items-center overflow-y-scroll">
+		<MediaGrid>
+			{#each movies as movie}
+				<MovieRatingItem movie={movie} onSelect={handleSelect} selected={selectedMovies[movie.id] !== undefined}></MovieRatingItem>
+			{/each}
+		</MediaGrid>
+	</div>
 
 	{#if loading}
 		<div class="flex flex-col items-center w-full">
