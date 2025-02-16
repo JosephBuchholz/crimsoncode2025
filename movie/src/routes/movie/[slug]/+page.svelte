@@ -2,26 +2,48 @@
 	import Icon from "@iconify/svelte";
 
     export let data;
-    const { movie } = data;
+    const { movie, serverWatched, serverRating } = data;
 
-    let watched = false;
-    let rating = 0; // can be 0 (none), 1 (good), or 2 (bad)
+    let watched = serverWatched;
+    let rating = serverRating; // can be 0 (none), 1 (good), or 2 (bad)
 
     $: goodButtonColor = rating === 1 ? "green" : "gray-400";
     $: badButtonColor = rating === 2 ? "red" : "gray-400";
 
+    const backendRatings = ["unrated", "positive", "negative"]
+
+    async function updateRating() {
+        try {
+            const response = await fetch('/api/rate/movie', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: movie.id, watched: watched, rating: backendRatings[rating], genres: movie.genres })
+            });
+            if (!response.ok) {
+                console.error('Failed to update rating');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     function handleOnWatchedButtonClicked() {
         watched = !watched;
+        updateRating();
     }
 
-    function handleOnGoodButtonClicked() {
+    async function handleOnGoodButtonClicked() {
         if (rating === 1) rating = 0;
         else rating = 1;
+        updateRating();
     }
 
-    function handleOnBadButtonClicked() {
+    async function handleOnBadButtonClicked() {
         if (rating === 2) rating = 0;
         else rating = 2;
+        updateRating();
     }
 </script>
 

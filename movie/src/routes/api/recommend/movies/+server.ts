@@ -4,7 +4,7 @@ import type { TMDBMovieDetailsItem, TMDBMovieSearchItem, TMDBTrendingMovieRespon
 
 const prisma = new PrismaClient();
 
-async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsItem[], tmdbGenreIds : number[]) {
+async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsItem[], ourRatings : number[], tmdbGenreIds : number[]) {
     console.log("Filling remaining recommendations...");
 
     // Fetch trending shows from TMDB API, filling the recommendations up to 20
@@ -26,6 +26,11 @@ async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsIt
 
                 if (recommendations.map((el) => el.id).includes(results[i].id)) {
                     console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because we already have it in our recommendations.");
+                    continue;
+                }
+
+                if (ourRatings.includes(results[i].id)) {
+                    console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because we have already seen it.");
                     continue;
                 }
 
@@ -128,7 +133,7 @@ export async function GET({ request }) {
         if (tries > 100) {
             console.log("Too many tries. Returning recommendations.");
             
-            recommendations = await fillRemainingRecommendations(recommendations, tmdbGenreIds);
+            recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
             return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
                 status: 200,
@@ -159,7 +164,7 @@ export async function GET({ request }) {
         if (!randomUser) {
             console.log("No users found. Returning recommendations.");
 
-            recommendations = await fillRemainingRecommendations(recommendations, tmdbGenreIds);
+            recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
             return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
                 status: 200,
@@ -215,12 +220,29 @@ export async function GET({ request }) {
         console.log("User " + randomUser + " was chosen.");
 
         // Add a recommendation based on what this user liked
-        const userRecommendations = userRatings.filter(
+        const userRecommendations = await userRatings.filter(
             (rating) => rating.rating == 'positive'
-        ).flatMap((rating) => {
+        ).flatMap( async (rating) => {
+            const ratingGenres = await prisma.ratingGenre.findMany({
+                where: {
+                    userId: randomUser,
+                    tmdbId: rating.tmdbId
+                }
+            })
+
             if (rating.type !== 'movie') {
                 return []
-            } else if (genreIds.includes(rating.genreId)) {
+            }
+
+            let isLikedGenre = false;
+            for (let i = 0; i < ratingGenres.length; i++) {
+                if (genreIds.includes(ratingGenres[i].genreId)) {
+                    isLikedGenre = true;
+                    break;
+                }
+            }
+
+            if (isLikedGenre) {
                 return [rating, rating];  
             } else {
                 return [rating];

@@ -17,8 +17,9 @@ model User {
   password String
   sessions Session[]
 
-  ratings UserRating[]
-  genres  UserGenre[]
+  ratings     UserRating[]
+  genres      UserGenre[]
+  RatingGenre RatingGenre[]
 }
 
 model Session {
@@ -34,15 +35,16 @@ enum FilmType {
 }
 
 model UserRating {
-  userId  String
-  tmdbId  Int
-  type    FilmType
-  genreId Int
-  rating  Rating
+  userId String
+  tmdbId Int
+  type   FilmType
+  rating Rating
 
-  genre Genre @relation(references: [id], fields: [genreId])
+  genres RatingGenre[]
 
-  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user    User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  Genre   Genre? @relation(fields: [genreId], references: [id])
+  genreId Int?
 
   @@id([userId, tmdbId])
 }
@@ -53,21 +55,38 @@ enum Rating {
   negative
 }
 
+model RatingGenre {
+  userId  String
+  tmdbId  Int
+  genreId Int
+
+  genre Genre @relation(references: [id], fields: [genreId])
+
+  user             User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  UserRating       UserRating? @relation(fields: [userRatingUserId, userRatingTmdbId], references: [userId, tmdbId])
+  userRatingUserId String?
+  userRatingTmdbId Int?
+
+  @@id([userId, tmdbId, genreId])
+}
+
 model UserGenre {
   userId  String
   genreId Int
 
-  genre Genre @relation(fields: [genreId], references: [id])
-  user  User  @relation(references: [id], fields: [userId], onDelete: Cascade)
+  genre Genre @relation(references: [id], fields: [genreId])
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@id([userId, genreId])
 }
 
 model Genre {
-  id          Int          @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   tmdbMovieId Int
   tmdbTvId    Int
   UserGenre   UserGenre[]
   UserRating  UserRating[]
+  RatingGenre RatingGenre[]
 }

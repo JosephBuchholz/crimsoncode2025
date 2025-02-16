@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 
 async function fillRemainingRecommendations(
 	recommendations: TMDBTVDetailsItem[],
+	ourRatings: number[],
 	tmdbGenreIds: number[]
 ) {
 	console.log('Filling remaining recommendations...');
@@ -55,6 +56,11 @@ async function fillRemainingRecommendations(
 						results[i].id +
 						') because we already have it in our recommendations.'
 				);
+				continue;
+			}
+
+			if (ourRatings.includes(results[i].id)) {
+				console.log("Rejected " + results[i].name + " (id: " + results[i].id + ") because we have already seen it.");
 				continue;
 			}
 
@@ -156,7 +162,7 @@ export async function GET({ request }) {
 		if (tries > 100) {
 			console.log('Too many tries. Returning recommendations.');
 
-			recommendations = await fillRemainingRecommendations(recommendations, tmdbGenreIds);
+			recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
 			return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
 				status: 200,
@@ -187,7 +193,7 @@ export async function GET({ request }) {
 		if (!randomUser) {
 			console.log('No users found. Returning recommendations.');
 
-			recommendations = await fillRemainingRecommendations(recommendations, tmdbGenreIds);
+			recommendations = await fillRemainingRecommendations(recommendations, ourRatings.map((el) => el.tmdbId), tmdbGenreIds);
 
 			return new Response(JSON.stringify({ error: false, recommendations: recommendations }), {
 				status: 200,

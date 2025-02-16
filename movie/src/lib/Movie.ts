@@ -1,5 +1,10 @@
 import type { TMDBMovieDetailsItem } from './server/tmdb';
 
+type MovieGenre = {
+	id: number;
+	name: string;
+};
+
 export default class Movie {
 	id: number;
 	title: string;
@@ -7,7 +12,7 @@ export default class Movie {
 	imageUrl: string;
 	year: number;
 	length: number;
-	genre: string;
+	genres: MovieGenre[];
 
 	constructor(
 		id: number,
@@ -16,7 +21,7 @@ export default class Movie {
 		imageUrl: string,
 		year: number,
 		length: number,
-		genre: string
+		genres: MovieGenre[]
 	) {
 		this.id = id;
 		this.title = title;
@@ -24,7 +29,7 @@ export default class Movie {
 		this.imageUrl = imageUrl;
 		this.year = year;
 		this.length = length;
-		this.genre = genre;
+		this.genres = genres;
 	}
 
 	static constructFromServerData(data: TMDBMovieDetailsItem): Movie {
@@ -35,11 +40,11 @@ export default class Movie {
 			`https://image.tmdb.org/t/p/original${data.poster_path}`,
 			Number(data.release_date.split('-')[0]),
 			data.runtime,
-			data.genres[0].name
+			data.genres
 		);
 	}
 
 	getFormattedDataString(): string {
-		return `${this.year} | ${this.length} m | ${this.genre}`;
+		return `${this.year} | ${this.length} m | ${this.genres.map((genre) => genre.name).join(', ')}`;
 	}
 }
