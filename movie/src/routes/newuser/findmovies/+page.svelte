@@ -13,7 +13,7 @@
 
 	let loading = false;
 	let input = "";
-	let page = 1;
+	let findpage = 1;
 
 	onMount(() => {
 		loadWatched();
@@ -22,7 +22,7 @@
 	async function loadWatched() {
 		loading = true;
 		movies = [];
-		const response = await fetch(`${baseUrl}/api/search/movies?q=${input}&page=${page}`);
+		const response = await fetch(`${baseUrl}/api/search/movies?q=${input}&page=${findpage}`);
 
 		const data: TMDBMovieSearchItem[] = (await response.json()).results;
 		data.forEach((el) => {
@@ -55,7 +55,7 @@
     }
 
 	async function searchChange() {
-		page = 1;
+		findpage = 1;
 		await loadWatched();
 	}
 
