@@ -10,5 +10,6 @@
 
 <!-- Otherwise tailwind classes may be stripped -->
 {#if false}
-    <div class="bg-gray-400 text-black"></div>
+    <div class="bg-gray-400 bg-red-500 bg-green-500 bg-green bg-red
+        text-black"></div>
 {/if}
