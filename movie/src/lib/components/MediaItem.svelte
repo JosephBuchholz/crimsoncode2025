@@ -5,10 +5,12 @@
 	import TVShowItem from "./TVShowItem.svelte";
 
     export let media: Movie | TVShow;
+
+    export let rating: string | undefined = undefined;
 </script>
 
 {#if media instanceof Movie}
-    <MovieItem movie={media}></MovieItem>
+    <MovieItem rating={rating} movie={media}></MovieItem>
 {:else}
-    <TVShowItem tvShow={media}></TVShowItem>
+    <TVShowItem rating={rating} tvShow={media}></TVShowItem>
 {/if}
