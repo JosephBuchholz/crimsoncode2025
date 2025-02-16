@@ -1,8 +1,33 @@
 <script>
     import { enhance } from "$app/forms";
 	import TextLink from "$lib/components/TextLink.svelte";
+	import RequiredTag from "$lib/components/RequiredTag.svelte";
 	import AuthActionButton from "../../lib/components/AuthActionButton.svelte";
 	import FormField from "../../lib/components/FormField.svelte";
+    import Select from "svelte-select";
+	import Icon from "@iconify/svelte";
+
+    let value = null;
+	let items = [
+		"Action",
+		"Adventure",
+		"Animation",
+		"Comedy",
+		"Crime",
+		"Documentary",
+		"Drama",
+		"Family",
+		"Fantasy",
+		"History",
+		"Horror",
+		"Music",
+		"Mystery",
+		"Romance",
+		"Sci-Fi",
+		"Thriller",
+		"War",
+		"Western"
+	];
 </script>
 
 <div class="w3-card w3-margin w3-padding">
@@ -12,21 +37,28 @@
 		</div>
 
 		<form class="flex flex-col" method="post" use:enhance>
-			<FormField name="name" id="name" type="name" placeholder="Your Name">
+			<FormField name="name" id="name" type="name" placeholder="Your Name" required>
 				Name
-			</FormField>
 
-			<FormField name="email" id="email" type="email" placeholder="Your Email">
+				<Icon slot="icon" width="24" height="24" icon="material-symbols:account-circle-outline" />
+			</FormField>
+			
+			<FormField name="email" id="email" type="email" placeholder="Your Email" required>
 				Email
-
-				<svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+				
+				<Icon slot="icon" width="24" height="24" icon="material-symbols:mail-outline" />
 			</FormField>
-
-			<FormField name="password" id="password" type="password" placeholder="••••••••••">
+			
+			<FormField name="password" id="password" type="password" placeholder="••••••••••" required>
 				Password
-
-				<svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-asterisk"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M12 8v8"></path><path d="m8.5 14 7-4"></path><path d="m8.5 10 7 4"></path></svg>
+				
+				<Icon slot="icon" width="24" height="24" icon="material-symbols:password" />
 			</FormField>
+
+			<label for="genres" class="block mb-2 text-sm font-medium text-[#111827]">Preferred Genres<RequiredTag/></label>
+			<div class="mb-4">
+				<Select name="genres" multiple required {items} bind:value/>
+			</div>
 
         	<AuthActionButton>Sign Up</AuthActionButton>
 			<div class="text-sm font-light text-[#6B7280] text-center">

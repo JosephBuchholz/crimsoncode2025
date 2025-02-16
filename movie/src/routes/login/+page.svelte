@@ -25,7 +25,7 @@
         
         <AuthActionButton>Login</AuthActionButton>
 
-        <div class="text-sm font-light text-[#6B7280] ">
+        <div class="text-center text-sm font-light text-[#6B7280] ">
             Don't have an accout yet? <TextLink href="/register">Sign Up</TextLink>
         </div>
     </form>
