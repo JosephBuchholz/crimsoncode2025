@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import type {
 	TMDBTVDetailsItem,
 	TMDBTVSearchItem,
-	TMDBTrendingTVResponse
+	TMDBTVSearchResponse
 } from '$lib/server/tmdb.js';
 
 const prisma = new PrismaClient();
@@ -25,7 +25,7 @@ async function fillRemainingRecommendations(
 		);
 
 		try {
-			const response: TMDBTrendingTVResponse = await (
+			const response: TMDBTVSearchResponse = await (
 				await fetch(
 					'https://api.themoviedb.org/3/trending/tv/week?language=en-US&page=' +
 						page +
