@@ -199,7 +199,7 @@ export async function GET({ request, url }) {
 		}
 
 		console.log('Attempting to find recommendation ' + (recommendations.length + 1) + ' of 20...');
-		console.log(recommendations);
+		// console.log(recommendations);
 
 		// Select a random user from the list of users that share our genres
 		const selectedUserIndex = Math.floor(Math.random() * uniqueUsers.length);
@@ -232,8 +232,7 @@ export async function GET({ request, url }) {
 				userRatings.filter(
 					(rating) =>
 						rating.rating !== 'unrated' &&
-						!recommendations.map((el) => el.id).includes(rating.tmdbId) &&
-						!ourRatedIds.includes(rating.tmdbId)
+						!recommendations.map((el) => el.id).includes(rating.tmdbId)
 				)
 			);
 
@@ -251,17 +250,20 @@ export async function GET({ request, url }) {
 		if (sharedRatings.length === 0) {
 			console.log('User ' + randomUser + ' has no ratings in common.');
 
-			if (Math.random() > 0.9) {
+			if (Math.random() > 0.1) {
 				tries++;
 				continue;
 			}
 		} else {
-			const score =
-				userRatings.map(
-					(rating) =>
-						ourRatings.find((ourRating) => ourRating.tmdbId === rating.tmdbId)?.rating ===
-						rating.rating
-				).length / userRatings.length;
+			let sharedRatingsCount = 0
+			sharedRatings.forEach((rating) => {
+				const match = ourRatings.find((ourRating) => ourRating.tmdbId == rating.tmdbId)?.rating ?? 'unrated';
+				if (match == rating.rating) {
+					sharedRatingsCount++;
+				}
+			})
+
+			const score = sharedRatingsCount / sharedRatings.length;
 
 			console.log('Score for user ' + randomUser + ': ' + score);
 
@@ -275,7 +277,7 @@ export async function GET({ request, url }) {
 
 		// Add a recommendation based on what this user liked
 		const userLiked = userRatings.filter(
-            (rating) => rating.rating == 'positive' && !existing.includes(rating.tmdbId)
+            (rating) => rating.rating == 'positive' && !ourRatedIds.includes(rating.tmdbId) && !existing.includes(rating.tmdbId)
         );
 
         const userRecommendationsPromise = userLiked.flatMap(async (rating) => {
@@ -299,7 +301,7 @@ export async function GET({ request, url }) {
             }
 
             if (isLikedGenre) {
-                return [rating, rating];  
+                return Array(10).fill(rating);  
             } else {
                 return [rating];
             }

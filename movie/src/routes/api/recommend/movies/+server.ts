@@ -165,7 +165,7 @@ export async function GET({ request, url }) {
         }
         
         console.log("Attempting to find recommendation " + (recommendations.length + 1) + " of 20...");
-        console.log(recommendations);
+        // console.log(recommendations);
     
         // Select a random user from the list of users that share our genres
         const selectedUserIndex = Math.floor(Math.random() * uniqueUsers.length);
@@ -195,10 +195,10 @@ export async function GET({ request, url }) {
                 } 
             }
         ).then((userRatings) => userRatings.filter(
-            (rating) => rating.rating !== 'unrated' && !recommendations.map((el) => el.id).includes(rating.tmdbId) && !ourRatedIds.includes(rating.tmdbId)
+            (rating) => rating.rating !== 'unrated' && !recommendations.map((el) => el.id).includes(rating.tmdbId)
         ));
 
-        console.log("User ratings: " + JSON.stringify(userRatings))
+        //console.log("User ratings: " + JSON.stringify(userRatings))
 
         // This user has no ratings (new user?), so skip them and remove them from the pool
         if (userRatings.length === 0) {
@@ -209,18 +209,28 @@ export async function GET({ request, url }) {
         }
 
         // Decide whether we choose this user
+	console.log(userRatings.map((rating) => rating.tmdbId))
+	console.log(ourRatedIds)
         const sharedRatings = userRatings.filter((rating) => ourRatedIds.includes(rating.tmdbId));
 
         if (sharedRatings.length === 0) {
             console.log("User " + randomUser + " has no ratings in common.");
 
-            if (Math.random() > 0.9) {
+            if (Math.random() > 0.1) {
                 tries++;
                 continue;
             }
         } else {
-            const score = userRatings.map((rating) => ourRatings.find((ourRating) => ourRating.tmdbId === rating.tmdbId)?.rating === rating.rating).length / userRatings.length;
-    
+            let sharedRatingsCount = 0
+			sharedRatings.forEach((rating) => {
+				const match = ourRatings.find((ourRating) => ourRating.tmdbId == rating.tmdbId)?.rating ?? 'unrated';
+				if (match == rating.rating) {
+					sharedRatingsCount++;
+				}
+			})
+
+			const score = sharedRatingsCount / sharedRatings.length;
+            
             console.log("Score for user " + randomUser + ": " + score);
     
             if (Math.random() > score) {
@@ -233,7 +243,7 @@ export async function GET({ request, url }) {
 
         // Add a recommendation based on what this user liked
         const userLiked = userRatings.filter(
-            (rating) => rating.rating == 'positive' && !existing.includes(rating.tmdbId)
+            (rating) => rating.rating == 'positive' && !ourRatedIds.includes(rating.tmdbId) && !existing.includes(rating.tmdbId)
         );
 
         const userRecommendationsPromise = userLiked.flatMap(async (rating) => {
@@ -257,7 +267,7 @@ export async function GET({ request, url }) {
             }
 
             if (isLikedGenre) {
-                return [rating, rating];  
+                return Array(10).fill(rating);  
             } else {
                 return [rating];
             }
