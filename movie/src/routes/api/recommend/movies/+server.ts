@@ -24,6 +24,11 @@ async function fillRemainingRecommendations(recommendations : TMDBMovieDetailsIt
                     break;
                 }
 
+                if (results[i].release_date > new Date().toISOString().split('T')[0]) {
+                    console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because it is not released yet.");
+                    continue;
+                }
+
                 if (recommendations.map((el) => el.id).includes(results[i].id)) {
                     console.log("Rejected " + results[i].title + " (id: " + results[i].id + ") because we already have it in our recommendations.");
                     continue;

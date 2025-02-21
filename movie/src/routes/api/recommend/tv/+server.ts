@@ -49,6 +49,11 @@ async function fillRemainingRecommendations(
 				break;
 			}
 
+			if (results[i].first_air_date > new Date().toISOString().split('T')[0]) {
+				console.log("Rejected " + results[i].name + " (id: " + results[i].id + ") because it is not released yet.");
+				continue;
+			}
+
 			if (recommendations.map((el) => el.id).includes(results[i].id)) {
 				console.log(
 					'Rejected ' +
